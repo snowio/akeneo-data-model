@@ -23,9 +23,4 @@ class MultiChannelProductData extends MultiChannelItemData
 
     /** @var ProductProperties */
     private $properties;
-
-    private function __construct()
-    {
-
-    }
 }

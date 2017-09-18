@@ -23,9 +23,4 @@ class MultiChannelVariantGroupData extends MultiChannelItemData
 
     /** @var VariantGroupProperties */
     private $properties;
-
-    private function __construct()
-    {
-
-    }
 }

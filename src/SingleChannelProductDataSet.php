@@ -1,25 +1,19 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class SingleChannelProductDataSet
+class SingleChannelProductDataSet extends SingleChannelItemDataSet
 {
     /**
      * @param SingleChannelProductData[] $items
      */
     public static function of(array $items): self
     {
-        $channels = [];
         foreach ($items as $item) {
             if (!$item instanceof SingleChannelProductData) {
                 throw new \Error('Items must be instances of ' . SingleChannelProductData::class . ' but something else was specified.');
             }
-            $channel = $item->getChannel();
-            if (\in_array($channel, $channels)) {
-                throw new \Error("Duplicate channel specified $channel");
-            }
-            $channels[] = $channel;
         }
-        return new self($items);
+        return parent::of($items);
     }
 
     public static function fromJson(array $json): self
@@ -31,73 +25,16 @@ class SingleChannelProductDataSet
         return self::of($items);
     }
 
-    public function getMultiChannelData(): ?MultiChannelProductData
+    public function getMultiChannelData(): MultiChannelProductData
     {
-        if ($this->isEmpty()) {
-            throw new \Error();
+        return parent::getMultiChannelData();
+    }
+
+    protected function createMultiChannelItemData(SingleChannelItemData $itemData): MultiChannelItemData
+    {
+        if (!$itemData instanceof SingleChannelProductData) {
+            throw new \InvalidArgumentException;
         }
-
-        $dataForMostRecentlyUpdatedChannel = $this->getDataForMostRecentlyUpdatedChannel();
-        $mostRecentlyUpdatedChannel = $dataForMostRecentlyUpdatedChannel->getChannel();
-        $properties = $dataForMostRecentlyUpdatedChannel->getProperties();
-        $attributeValues = $this->getAttributeValues();
-        $attributeOptions = $this->getAttributeOptions();
-        return MultiChannelProductData::of($properties, $attributeValues, $attributeOptions, $mostRecentlyUpdatedChannel);
-    }
-
-    public function isEmpty(): bool
-    {
-        return empty($this->items);
-    }
-
-    /** @var SingleChannelProductData[] */
-    private $items;
-
-    private function __construct(array $items)
-    {
-        $this->items = $items;
-    }
-
-    private function getDataForMostRecentlyUpdatedChannel(): SingleChannelProductData
-    {
-        $newest = \reset($this->items);
-        foreach ($this->items as $singleChannelData) {
-            if ($singleChannelData->getTimestamp() > $newest->getTimestamp()) {
-                $newest = $singleChannelData;
-            }
-        }
-        return $newest;
-    }
-
-    private function getAttributeValues(): AttributeValueSet
-    {
-        $attributeValues = $this->getDataForMostRecentlyUpdatedChannel()->getAttributeValues()
-            ->filter(function (AttributeValue $attributeValue) {
-                return $attributeValue->getScope()->getChannel() === null;
-            });
-
-        foreach ($this->items as $item) {
-            $attributeValues = $item->getAttributeValues()
-                ->filter(function (AttributeValue $attributeValue) {
-                    return $attributeValue->getScope()->getChannel() !== null;
-                })
-                ->add($attributeValues);
-        }
-
-        return $attributeValues;
-    }
-
-    private function getAttributeOptions(): AttributeOptionSet
-    {
-        $items = $this->items;
-        \usort($items, function (SingleChannelProductData $productData1, SingleChannelProductData $productData2) {
-            return $productData1->getTimestamp() - $productData2->getTimestamp();
-        });
-        $attributeOptions = AttributeOptionSet::empty();
-        /** @var SingleChannelProductData $item */
-        foreach ($items as $item) {
-            $attributeOptions = $attributeOptions->merge($item->getAttributeOptions());
-        }
-        return $attributeOptions;
+        return MultiChannelProductData::of($itemData->getProperties());
     }
 }

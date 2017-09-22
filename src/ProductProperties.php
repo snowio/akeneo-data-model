@@ -3,6 +3,16 @@ namespace SnowIO\AkeneoDataModel;
 
 class ProductProperties
 {
+    public static function of(string $sku): self
+    {
+        $properties = new self;
+        $properties->sku = $sku;
+        $properties->enabled = false;
+        $properties->variantGroups = [];
+        $properties->categories = CategoryReferenceSet::empty();
+        return $properties;
+    }
+
     public static function fromJson(array $json): self
     {
         $properties = new self;
@@ -41,7 +51,7 @@ class ProductProperties
         return $this->enabled;
     }
 
-    public function getFamily(): string
+    public function getFamily(): ?string
     {
         return $this->family;
     }

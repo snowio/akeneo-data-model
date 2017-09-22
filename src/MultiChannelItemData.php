@@ -3,6 +3,17 @@ namespace SnowIO\AkeneoDataModel;
 
 abstract class MultiChannelItemData
 {
+    public function hasDataForChannel(string $channel): bool
+    {
+        /** @var AttributeValue $attributeValue */
+        foreach ($this->attributeValues as $attributeValue) {
+            if ($attributeValue->getScope()->getChannel() === $channel) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getAttributeValue(AttributeValueIdentifier $identifier)
     {
         return $this->attributeValues->getValue($identifier);

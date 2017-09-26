@@ -47,10 +47,32 @@ class AttributeValueSet implements \IteratorAggregate
         return new self($attributeValues);
     }
 
-    public function filterByScope(Scope $scope): self
+    public function filterByExactScope(Scope $scope): self
     {
         return $this->filter(function (AttributeValue $attributeValue) use ($scope) {
             return $attributeValue->getScope()->equals($scope);
+        });
+    }
+
+    /**
+     * @deprecated Use filterByExactScope() instead
+     */
+    public function filterByScope(Scope $scope): self
+    {
+        return $this->filterByExactScope($scope);
+    }
+
+    public function filterByChannel(string $channel): self
+    {
+        return $this->filter(function (AttributeValue $attributeValue) use ($channel) {
+            return $attributeValue->getScope()->getChannel() === $channel;
+        });
+    }
+
+    public function filterByLocale(string $locale): self
+    {
+        return $this->filter(function (AttributeValue $attributeValue) use ($locale) {
+            return $attributeValue->getScope()->getLocale() === $locale;
         });
     }
 

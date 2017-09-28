@@ -44,17 +44,6 @@ class Category
         return $category;
     }
 
-    public function toJson(): array
-    {
-        return [
-            'code' => $this->code,
-            'parent' => $this->parent,
-            'path' => $this->reference->getPath(),
-            'labels' => $this->labels,
-            '@timestamp' => $this->timestamp,
-        ];
-    }
-
     private $code;
     private $parent;
     /** @var CategoryReference $reference*/

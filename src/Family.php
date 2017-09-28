@@ -39,7 +39,7 @@ class Family
         $family->groups = array_map(function (array $attributeGroup) {
             return AttributeGroup::fromJson($attributeGroup);
         }, $json['attribute_groups']);
-        $family->attributes = FamilyAttributeSet::fromJson($json);
+        $family->attributes = FamilyAttributeSet::fromJson($json['attribute_groups']);
         $family->labels = $json['labels'];
         $family->timestamp = $json['@timestamp'];
         return $family;

@@ -34,7 +34,7 @@ class FamilyAttributeSet implements \IteratorAggregate
     public static function fromJson(array $json): self
     {
         $attributes = [];
-        foreach ($json['attribute_groups'] as $attributeGroupJson) {
+        foreach ($json as $attributeGroupJson) {
             foreach ($attributeGroupJson['attributes'] as $attributeJson) {
                 $attributeJson += ['group' => $attributeGroupJson['code']];
                 $attributes[$attributeGroupJson['code']] = FamilyAttributeData::fromJson($attributeJson);

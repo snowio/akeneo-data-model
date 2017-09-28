@@ -8,7 +8,7 @@ class Category
         return $this->code;
     }
 
-    public function getParent(): string
+    public function getParent(): ?string
     {
         return $this->parent;
     }

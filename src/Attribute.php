@@ -72,19 +72,6 @@ class Attribute
         return $attribute;
     }
 
-    public function toJson(): array
-    {
-        return [
-            'code' => $this->code,
-            'type' => $this->type,
-            'localizable' => $this->localizable,
-            'scopable' => $this->scopable,
-            'sort_order' => $this->sortOrder,
-            'group' => $this->group,
-            '@timestamp' => $this->timestamp,
-        ];
-    }
-
     private $code;
     private $type;
     private $labels = [];

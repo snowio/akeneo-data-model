@@ -10,7 +10,7 @@ class FamilyAttributeData
 
     public function isRequired(string $channel): bool
     {
-        return $this->isRequired[$channel] ?? null;
+        return $this->isRequired[$channel] ?? false;
     }
 
     public function getGroup(): string

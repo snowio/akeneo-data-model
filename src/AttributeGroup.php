@@ -29,6 +29,7 @@ class AttributeGroup
         $attributeGroup->code = $json['code'];
         $attributeGroup->labels = $json['labels'];
         $attributeGroup->sortOrder = $json['sort_order'];
+        return $attributeGroup;
     }
 
     private $code;

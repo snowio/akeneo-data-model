@@ -47,7 +47,9 @@ class AttributeOptionSet implements \IteratorAggregate
                     foreach ($labels as $optionCode => $label) {
                         $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, $optionCode);
                         $option = $options[$optionIdentifier->toString()] ?? AttributeOption::of($optionIdentifier);
-                        $options[$optionIdentifier->toString()] = $option->withLabel($label, $locale);
+                        if ($label !== null) {
+                            $options[$optionIdentifier->toString()] = $option->withLabel($label, $locale);
+                        }
                     }
                 } elseif ($optionCodeOrCodes !== null) {
                     if (\is_array($labelOrLabels)) {
@@ -55,7 +57,9 @@ class AttributeOptionSet implements \IteratorAggregate
                     }
                     $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, $optionCodeOrCodes);
                     $option = $options[$optionIdentifier->toString()] ?? AttributeOption::of($optionIdentifier);
-                    $options[$optionIdentifier->toString()] = $option->withLabel($labelOrLabels, $locale);
+                    if ($labelOrLabels !== null) {
+                        $options[$optionIdentifier->toString()] = $option->withLabel($labelOrLabels, $locale);
+                    }
                 }
             }
         }

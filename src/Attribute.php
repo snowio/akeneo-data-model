@@ -63,8 +63,8 @@ class Attribute
         $attribute = new self();
         $attribute->code = $json['code'];
         $attribute->type = $json['type'];
-        $attribute->localizable = $json['localizable'];
-        $attribute->scopable = $json['scopable'];
+        $attribute->localizable = (bool)$json['localizable'];
+        $attribute->scopable = (bool)$json['scopable'];
         $attribute->sortOrder = $json['sort_order'];
         $attribute->labels = $json['labels'];
         $attribute->group = $json['group'];

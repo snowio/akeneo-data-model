@@ -23,7 +23,7 @@ class Family
         return $this->labels;
     }
 
-    public function getLabel(string $locale): string
+    public function getLabel(string $locale): ?string
     {
         return $this->labels[$locale] ?? null;
     }

@@ -59,7 +59,7 @@ class PriceSet implements \IteratorAggregate
             if (!\is_string($amount)) {
                 throw new \Error;
             }
-            $prices[$currencyCode] = Price::of($currencyCode, $amount);
+            $prices[$currencyCode] = Price::of($amount, $currencyCode);
         }
         return new PriceSet($prices);
     }

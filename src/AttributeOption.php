@@ -7,6 +7,7 @@ class AttributeOption
     {
         $option = new self;
         $option->identifier = $identifier;
+        $option->labels = InternationalizedString::create();
         return $option;
     }
 

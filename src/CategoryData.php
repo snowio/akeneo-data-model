@@ -3,14 +3,22 @@ namespace SnowIO\AkeneoDataModel;
 
 class CategoryData
 {
+    public static function of(CategoryPath $path): self
+    {
+        $categoryData = new self;
+        $categoryData->path = $path;
+        $categoryData->labels = InternationalizedString::create();
+        return $categoryData;
+    }
+
     public function getCode(): string
     {
-        return $this->code;
+        return $this->path->getCategoryCode();
     }
 
     public function getParent(): ?string
     {
-        return $this->parent;
+        return $this->path->getParentCategoryCode();
     }
 
     public function getPath(): CategoryPath
@@ -28,18 +36,28 @@ class CategoryData
         return $this->labels->getValue($locale);
     }
 
+    public function withLabels(InternationalizedString $labels): self
+    {
+        $result = clone $this;
+        $result->labels = $labels;
+        return $result;
+    }
+
+    public function withLabel(LocalizedString $label): self
+    {
+        $result = clone $this;
+        $result->labels = $this->labels->with($label);
+        return $result;
+    }
+
     public static function fromJson(array $json): self
     {
         $category = new self;
-        $category->code = $json['code'];
-        $category->parent = $json['parent'];
         $category->path = CategoryPath::of($json['path']);
         $category->labels = InternationalizedString::fromJson($json['labels']);
         return $category;
     }
 
-    private $code;
-    private $parent;
     /** @var CategoryPath $path*/
     private $path;
     /** @var InternationalizedString */

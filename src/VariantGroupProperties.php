@@ -8,9 +8,10 @@ class VariantGroupProperties
         $properties = new self;
         $properties->code = $json['code'];
         $properties->axis = \is_array($json['axis']) ? $json['axis'] : \explode(',', $json['axis']);
-        $properties->labels = \array_map(function (array $localization) {
+        $labels = \array_map(function (array $localization) {
             return $localization['label'] === '' ? null : $localization['label'];
         }, $json['localizations'] ?? []);
+        $properties->labels = InternationalizedString::fromJson($labels);
         return $properties;
     }
 
@@ -27,18 +28,19 @@ class VariantGroupProperties
         return $this->axis;
     }
 
-    public function getLabel(string $locale): ?string
-    {
-        return $this->labels[$locale] ?? null;
-    }
-
-    public function getLabels(): array
+    public function getLabels(): InternationalizedString
     {
         return $this->labels;
     }
 
+    public function getLabel(string $locale): ?string
+    {
+        return $this->labels->getValue($locale);
+    }
+
     private $code;
     private $axis;
+    /** @var InternationalizedString */
     private $labels;
 
     private function __construct()

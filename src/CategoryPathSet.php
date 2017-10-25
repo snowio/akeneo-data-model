@@ -1,14 +1,14 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class CategoryReferenceSet implements \IteratorAggregate
+class CategoryPathSet implements \IteratorAggregate
 {
-    public static function of(array $categories): self
+    public static function of(array $categoryPaths): self
     {
-        return new CategoryReferenceSet($categories);
+        return new CategoryPathSet($categoryPaths);
     }
 
-    public static function empty(): self
+    public static function create(): self
     {
         return self::of([]);
     }
@@ -17,9 +17,9 @@ class CategoryReferenceSet implements \IteratorAggregate
     {
         $references = [];
         foreach ($json as $categoryCodes) {
-            $references[] = CategoryReference::of($categoryCodes);
+            $references[] = CategoryPath::of($categoryCodes);
         }
-        return new CategoryReferenceSet($references);
+        return new CategoryPathSet($references);
     }
 
     /**
@@ -28,7 +28,7 @@ class CategoryReferenceSet implements \IteratorAggregate
     public function getCategoryCodes(): array
     {
         return \array_map(
-            function (CategoryReference $reference) {
+            function (CategoryPath $reference) {
                 return $reference->getCategoryCode();
             },
             $this->categoryReferences
@@ -47,9 +47,8 @@ class CategoryReferenceSet implements \IteratorAggregate
      */
     public function filterByAncestor(string $ancestorCategoryCode): self
     {
-        return $this->filter(function (CategoryReference $reference) use ($ancestorCategoryCode) {
-            return $reference->isDescendantOf($ancestorCategoryCode)
-            || $reference->getCategoryCode() === $ancestorCategoryCode;
+        return $this->filter(function (CategoryPath $categoryPath) use ($ancestorCategoryCode) {
+            return $categoryPath->contains($ancestorCategoryCode);
         });
     }
 

@@ -3,7 +3,7 @@ namespace SnowIO\AkeneoDataModel;
 
 class AttributeOptionSet implements \IteratorAggregate
 {
-    public static function empty(): self
+    public static function create(): self
     {
         return new self([]);
     }
@@ -21,10 +21,10 @@ class AttributeOptionSet implements \IteratorAggregate
         return null;
     }
 
-    public function getOptionLabels(AttributeOptionIdentifier $identifier): array
+    public function getOptionLabels(AttributeOptionIdentifier $identifier): InternationalizedString
     {
         $option = $this->getOption($identifier);
-        return $option ? $option->getLabels() : [];
+        return $option ? $option->getLabels() : InternationalizedString::create();
     }
 
     public function merge(self $attributeOptionSet): self
@@ -41,24 +41,24 @@ class AttributeOptionSet implements \IteratorAggregate
                 $optionCodeOrCodes = $localizationJson['attribute_values'][$attributeCode] ?? $json['attribute_values'][$attributeCode] ?? null;
                 if (\is_array($optionCodeOrCodes)) {
                     if (!\is_array($labelOrLabels) || \count($optionCodeOrCodes) != \count($labelOrLabels)) {
-                        throw new \Error();
+                        throw new AkeneoDataException;
                     }
                     $labels = \array_combine($optionCodeOrCodes, $labelOrLabels);
                     foreach ($labels as $optionCode => $label) {
                         $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, $optionCode);
                         $option = $options[$optionIdentifier->toString()] ?? AttributeOption::of($optionIdentifier);
                         if ($label !== null) {
-                            $options[$optionIdentifier->toString()] = $option->withLabel($label, $locale);
+                            $options[$optionIdentifier->toString()] = $option->withLabel(LocalizedString::of($label, $locale));
                         }
                     }
                 } elseif ($optionCodeOrCodes !== null) {
                     if (\is_array($labelOrLabels)) {
-                        throw new \Error();
+                        throw new AkeneoDataException;
                     }
                     $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, $optionCodeOrCodes);
                     $option = $options[$optionIdentifier->toString()] ?? AttributeOption::of($optionIdentifier);
                     if ($labelOrLabels !== null) {
-                        $options[$optionIdentifier->toString()] = $option->withLabel($labelOrLabels, $locale);
+                        $options[$optionIdentifier->toString()] = $option->withLabel(LocalizedString::of($labelOrLabels, $locale));
                     }
                 }
             }

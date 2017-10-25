@@ -3,7 +3,7 @@ namespace SnowIO\AkeneoDataModel;
 
 class FamilyAttributeSet implements \IteratorAggregate
 {
-    public static function empty(): self
+    public static function create(): self
     {
         return new self([]);
     }

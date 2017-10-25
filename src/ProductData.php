@@ -1,14 +1,14 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class MultiChannelProductData extends MultiChannelItemData
+class ProductData extends ItemData
 {
-    public static function of(ProductProperties $properties): self
+    public static function fromJson(array $json): self
     {
-        /** @var static $multiChannelData */
-        $multiChannelData = parent::create();
-        $multiChannelData->properties = $properties;
-        return $multiChannelData;
+        /** @var static $productData */
+        $productData = parent::fromJson($json);
+        $productData->properties = ProductProperties::fromJson($json);
+        return $productData;
     }
 
     public function getSku(): string

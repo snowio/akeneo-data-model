@@ -1,17 +1,17 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class PriceSet implements \IteratorAggregate
+class PriceCollection implements \IteratorAggregate
 {
     public static function of(array $prices): self
     {
         $pricesByCurrency = [];
         foreach ($prices as $price) {
             if (!$price instanceof Price) {
-                throw new \Error;
+                throw new AkeneoDataException;
             }
             if (isset($pricesByCurrency[$price->getCurrency()])) {
-                throw new \Error;
+                throw new AkeneoDataException;
             }
             $pricesByCurrency[$price->getCurrency()] = $price;
         }
@@ -46,22 +46,22 @@ class PriceSet implements \IteratorAggregate
         return new self($prices);
     }
 
-    public static function fromJson(array $json): PriceSet
+    public static function fromJson(array $json): PriceCollection
     {
         $prices = [];
         foreach ($json as $currencyCode => $amount) {
             if (!\is_string($currencyCode)) {
-                throw new \Error;
+                throw new AkeneoDataException;
             }
             if ($amount === null) {
                 continue;
             }
             if (!\is_string($amount)) {
-                throw new \Error;
+                throw new AkeneoDataException;
             }
             $prices[$currencyCode] = Price::of($amount, $currencyCode);
         }
-        return new PriceSet($prices);
+        return new PriceCollection($prices);
     }
 
     public function getIterator(): \Iterator

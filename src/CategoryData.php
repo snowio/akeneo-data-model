@@ -1,7 +1,7 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class Category
+class CategoryData
 {
     public function getCode(): string
     {
@@ -13,24 +13,19 @@ class Category
         return $this->parent;
     }
 
-    public function getReference(): CategoryReference
+    public function getPath(): CategoryPath
     {
-        return $this->reference;
+        return $this->path;
     }
 
-    public function getLabels(): array
+    public function getLabels(): InternationalizedString
     {
         return $this->labels;
     }
 
     public function getLabel(string $locale): ?string
     {
-        return $this->labels[$locale] ?? null;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
+        return $this->labels->getValue($locale);
     }
 
     public static function fromJson(array $json): self
@@ -38,18 +33,17 @@ class Category
         $category = new self;
         $category->code = $json['code'];
         $category->parent = $json['parent'];
-        $category->reference = CategoryReference::of($json['path']);
-        $category->labels = $json['labels'];
-        $category->timestamp = $json['@timestamp'];
+        $category->path = CategoryPath::of($json['path']);
+        $category->labels = InternationalizedString::fromJson($json['labels']);
         return $category;
     }
 
     private $code;
     private $parent;
-    /** @var CategoryReference $reference*/
-    private $reference;
+    /** @var CategoryPath $path*/
+    private $path;
+    /** @var InternationalizedString */
     private $labels;
-    private $timestamp;
 
     private function __construct()
     {

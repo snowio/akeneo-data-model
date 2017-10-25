@@ -25,26 +25,41 @@ class AttributeOption
         return $this->identifier;
     }
 
-    public function withLabel(string $label, string $locale): self
-    {
-        $result = clone $this;
-        $result->labels[$locale] = $label;
-        return $result;
-    }
-
-    public function getLabel(string $locale): ?string
-    {
-        return $this->labels[$locale] ?? null;
-    }
-
-    public function getLabels(): array
+    public function getLabels(): InternationalizedString
     {
         return $this->labels;
     }
 
+    public function getLabel(string $locale): ?string
+    {
+        return $this->labels->getValue($locale);
+    }
+
+    public function withLabels(InternationalizedString $labels): self
+    {
+        $result = clone $this;
+        $result->labels = $labels;
+        return $result;
+    }
+
+    public function withLabel(LocalizedString $label): self
+    {
+        $result = clone $this;
+        $result->labels = $this->labels->with($label);
+        return $result;
+    }
+
+    public static function fromJson(array $json): self
+    {
+        $identifier = AttributeOptionIdentifier::of($json['attribute'], $json['code']);
+        $labels = InternationalizedString::fromJson($json['labels']);
+        return self::of($identifier)->withLabels($labels);
+    }
+
     /** @var AttributeOptionIdentifier */
     private $identifier;
-    private $labels = [];
+    /** @var InternationalizedString */
+    private $labels;
 
     private function __construct()
     {

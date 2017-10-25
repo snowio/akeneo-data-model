@@ -1,5 +1,8 @@
 {
     "name": "snowio/akeneo-data-model",
+    "require": {
+        "php": ">=7.1"
+    },
     "autoload": {
         "psr-4": {
             "SnowIO\\AkeneoDataModel\\": "src"

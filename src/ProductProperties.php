@@ -9,7 +9,7 @@ class ProductProperties
         $properties->sku = $sku;
         $properties->enabled = false;
         $properties->variantGroups = [];
-        $properties->categories = CategoryReferenceSet::empty();
+        $properties->categories = CategoryPathSet::create();
         return $properties;
     }
 
@@ -24,7 +24,7 @@ class ProductProperties
         }
         $properties->enabled = (bool)$json['enabled'];
         $properties->family = $json['family'];
-        $properties->categories = CategoryReferenceSet::fromJson($json['categories']);
+        $properties->categories = CategoryPathSet::fromJson($json['categories']);
         return $properties;
     }
 
@@ -56,7 +56,7 @@ class ProductProperties
         return $this->family;
     }
 
-    public function getCategories(): CategoryReferenceSet
+    public function getCategories(): CategoryPathSet
     {
         return $this->categories;
     }

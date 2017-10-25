@@ -1,7 +1,7 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class SingleChannelVariantGroupData extends SingleChannelItemData
+class VariantGroupData extends ItemData
 {
     public static function fromJson(array $json): self
     {

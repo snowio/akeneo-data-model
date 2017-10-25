@@ -3,7 +3,7 @@ namespace SnowIO\AkeneoDataModel;
 
 class AttributeValueSet implements \IteratorAggregate
 {
-    public static function empty(): self
+    public static function create(): self
     {
         return new self([]);
     }
@@ -82,7 +82,7 @@ class AttributeValueSet implements \IteratorAggregate
             \array_intersect_key($this->attributeValues, $attributeValueSet->attributeValues) !== []
             || \array_intersect_key($attributeValueSet->attributeValues, $this->attributeValues) !== []
         ) {
-            throw new \Exception();
+            throw new AkeneoDataException;
         }
 
         $mergedValues = \array_merge($this->attributeValues, $attributeValueSet->attributeValues);
@@ -123,7 +123,7 @@ class AttributeValueSet implements \IteratorAggregate
     {
         foreach ($json as $attributeCode => $value) {
             if (\is_array($value) && \is_string(\key($value))) {
-                $sanitizedValue = PriceSet::fromJson($value);
+                $sanitizedValue = PriceCollection::fromJson($value);
             } else {
                 $sanitizedValue = $value === '' ? null : $value;
             }

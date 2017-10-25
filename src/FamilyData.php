@@ -1,7 +1,7 @@
 <?php
 namespace SnowIO\AkeneoDataModel;
 
-class Family
+class FamilyData
 {
     public function getCode(): string
     {
@@ -18,19 +18,14 @@ class Family
         return $this->attributes;
     }
 
-    public function getLabels(): array
+    public function getLabels(): InternationalizedString
     {
         return $this->labels;
     }
 
     public function getLabel(string $locale): ?string
     {
-        return $this->labels[$locale] ?? null;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
+        return $this->labels->getValue($locale);
     }
 
     public static function fromJson(array $json): self
@@ -40,16 +35,15 @@ class Family
             return AttributeGroup::fromJson($attributeGroup);
         }, $json['attribute_groups']);
         $family->attributes = FamilyAttributeSet::fromJson($json['attribute_groups']);
-        $family->labels = $json['labels'];
-        $family->timestamp = $json['@timestamp'];
+        $family->labels = InternationalizedString::fromJson($json['labels']);
         return $family;
     }
 
     private $code;
     private $groups;
     private $attributes;
+    /** @var InternationalizedString */
     private $labels;
-    private $timestamp;
 
     private function __construct()
     {

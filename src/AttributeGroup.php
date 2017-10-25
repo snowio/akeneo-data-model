@@ -8,14 +8,14 @@ class AttributeGroup
         return $this->code;
     }
 
-    public function getLabels(): array
+    public function getLabels(): InternationalizedString
     {
         return $this->labels;
     }
 
     public function getLabel(string $locale): ?string
     {
-        return $this->labels[$locale] ?? null;
+        return $this->labels->getValue($locale);
     }
 
     public function getSortOrder(): int
@@ -27,12 +27,13 @@ class AttributeGroup
     {
         $attributeGroup = new self;
         $attributeGroup->code = $json['code'];
-        $attributeGroup->labels = $json['labels'];
-        $attributeGroup->sortOrder = $json['sort_order'];
+        $attributeGroup->labels = InternationalizedString::fromJson($json['labels']);
+        $attributeGroup->sortOrder = (int)$json['sort_order'];
         return $attributeGroup;
     }
 
     private $code;
+    /** @var InternationalizedString */
     private $labels;
     private $sortOrder;
 

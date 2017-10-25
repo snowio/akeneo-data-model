@@ -16,7 +16,7 @@ class CategoryPath
             if (\in_array($categoryCode, $result->path, $strict = true)) {
                 throw new AkeneoDataException('Path must not contain duplicate category codes.');
             }
-            $result[] = $categoryCodes;
+            $result->path[] = $categoryCodes;
         }
         return $result;
     }

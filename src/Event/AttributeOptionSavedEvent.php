@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\AttributeOption;

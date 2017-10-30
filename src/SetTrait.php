@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace SnowIO\AkeneoDataModel\Internal;
+namespace SnowIO\AkeneoDataModel;
 
 use SnowIO\AkeneoDataModel\AkeneoDataException;
 

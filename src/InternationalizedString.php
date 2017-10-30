@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace SnowIO\AkeneoDataModel;
 
-use SnowIO\AkeneoDataModel\Internal\SetTrait;
-
 final class InternationalizedString implements \IteratorAggregate
 {
     use SetTrait;

@@ -38,6 +38,11 @@ class VariantGroupSavedEvent
         return $this->previousData;
     }
 
+    public function hasPreviousVariantGroupData(): bool
+    {
+        return isset($this->previousData);
+    }
+
     public function getTimestamp(): int
     {
         return $this->timestamp;

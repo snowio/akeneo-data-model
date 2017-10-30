@@ -45,6 +45,11 @@ class AttributeOptionSavedEvent
         return $this->previousData;
     }
 
+    public function hasPreviousAttributeOptionData(): bool
+    {
+        return isset($this->previousData);
+    }
+
     public function getCurrentAttributeOptionLabels(): InternationalizedString
     {
         return $this->currentData->getLabels();

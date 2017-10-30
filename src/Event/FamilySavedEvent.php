@@ -33,6 +33,11 @@ class FamilySavedEvent
         return $this->previousData;
     }
 
+    public function hasPreviousFamilyData(): bool
+    {
+        return isset($this->previousData);
+    }
+
     public function getTimestamp(): int
     {
         return $this->timestamp;

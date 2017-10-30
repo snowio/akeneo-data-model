@@ -33,6 +33,11 @@ class CategorySavedEvent
         return $this->previousData;
     }
 
+    public function hasPreviousCategoryData(): bool
+    {
+        return isset($this->previousData);
+    }
+
     public function getTimestamp(): int
     {
         return $this->timestamp;

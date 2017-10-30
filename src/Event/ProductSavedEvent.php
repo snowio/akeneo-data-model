@@ -38,6 +38,11 @@ class ProductSavedEvent
         return $this->previousData;
     }
 
+    public function hasPreviousProductData(): bool
+    {
+        return isset($this->previousData);
+    }
+
     public function getTimestamp(): int
     {
         return $this->timestamp;

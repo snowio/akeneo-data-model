@@ -88,8 +88,8 @@ trait SetTrait
         }
 
         foreach ($this->items as $key => $item) {
-            $otherItem = $object->items[$key];
-            if (!self::itemsAreEqual($item, $otherItem)) {
+            $otherItem = $object->items[$key] ?? null;
+            if ($otherItem === null || !self::itemsAreEqual($item, $otherItem)) {
                 return false;
             }
         }

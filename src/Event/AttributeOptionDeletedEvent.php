@@ -33,12 +33,12 @@ class AttributeOptionDeletedEvent
         return $this->previousData->getOptionCode();
     }
 
-    public function getCurrentAttributeOptionData(): AttributeOption
+    public function getPreviousAttributeOptionData(): AttributeOption
     {
         return $this->previousData;
     }
 
-    public function getCurrentAttributeOptionLabels(): InternationalizedString
+    public function getPreviousAttributeOptionLabels(): InternationalizedString
     {
         return $this->previousData->getLabels();
     }

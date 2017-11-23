@@ -4,50 +4,32 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\ProductData;
 
-class ProductDeletedEvent
+final class ProductDeletedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->previousData = ProductData::fromJson($json);
-        // right now the akeneo connector only provides one timestamp
-        $event->timestamp = (int)$json['@timestamp'];
-        $event->previousTimestamp = (int)$json['@timestamp'];
-        return $event;
+        $previousData = ProductData::fromJson($json);
+        return new self(
+            $previousData->getSku(),
+            null,
+            $previousData,
+            (int)$json['@timestamp'],
+            (int)$json['@timestamp'] // right now the akeneo connector only provides one timestamp for delete events
+        );
     }
 
     public function getProductSku(): string
     {
-        return $this->previousData->getSku();
+        return $this->getEntityIdentifier();
     }
 
     public function getChannel(): string
     {
-        return $this->previousData->getChannel();
+        return $this->getPreviousProductData()->getChannel();
     }
 
     public function getPreviousProductData(): ProductData
     {
-        return $this->previousData;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var ProductData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->getPreviousEntityData();
     }
 }

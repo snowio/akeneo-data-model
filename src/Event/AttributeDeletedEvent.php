@@ -4,45 +4,27 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\AttributeData;
 
-class AttributeDeletedEvent
+final class AttributeDeletedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->previousData = AttributeData::fromJson($json);
-        // right now the akeneo connector only provides one timestamp
-        $event->timestamp = (int)$json['@timestamp'];
-        $event->previousTimestamp = (int)$json['@timestamp'];
-        return $event;
+        $previousData = AttributeData::fromJson($json);
+        return new self(
+            $previousData->getCode(),
+            null,
+            $previousData,
+            (int)$json['@timestamp'],
+            (int)$json['@timestamp'] // right now the akeneo connector only provides one timestamp for delete events
+        );
     }
 
     public function getAttributeCode(): string
     {
-        return $this->previousData->getCode();
+        return $this->getEntityIdentifier();
     }
 
     public function getPreviousAttributeData(): AttributeData
     {
-        return $this->previousData;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var AttributeData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->getPreviousEntityData();
     }
 }

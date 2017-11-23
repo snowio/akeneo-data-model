@@ -4,45 +4,27 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\CategoryData;
 
-class CategoryDeletedEvent
+final class CategoryDeletedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->previousData = CategoryData::fromJson($json);
-        // right now the akeneo connector only provides one timestamp
-        $event->timestamp = (int)$json['@timestamp'];
-        $event->previousTimestamp = (int)$json['@timestamp'];
-        return $event;
+        $previousData = CategoryData::fromJson($json);
+        return new self(
+            $previousData->getCode(),
+            null,
+            $previousData,
+            (int)$json['@timestamp'],
+            (int)$json['@timestamp'] // right now the akeneo connector only provides one timestamp for delete events
+        );
     }
 
     public function getCategoryCode(): string
     {
-        return $this->previousData->getCode();
+        return $this->getEntityIdentifier();
     }
 
     public function getPreviousCategoryData(): CategoryData
     {
-        return $this->previousData;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var CategoryData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->getPreviousEntityData();
     }
 }

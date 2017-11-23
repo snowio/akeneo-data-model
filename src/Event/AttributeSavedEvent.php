@@ -4,59 +4,45 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\AttributeData;
 
-class AttributeSavedEvent
+final class AttributeSavedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->currentData = AttributeData::fromJson($json['new']);
-        $event->timestamp = (int)$json['new']['@timestamp'];
+        $currentData = AttributeData::fromJson($json['new']);
+        $currentTimestamp = (int)$json['new']['@timestamp'];
         if (isset($json['old'])) {
-            $event->previousData = AttributeData::fromJson($json['old']);
-            $event->previousTimestamp = (int)$json['old']['@timestamp'];
+            $previousData = AttributeData::fromJson($json['old']);
+            $previousTimestamp = (int)$json['old']['@timestamp'];
+        } else {
+            $previousData = null;
+            $previousTimestamp = null;
         }
-        return $event;
+        return new self(
+            $currentData->getCode(),
+            $currentData,
+            $previousData,
+            $currentTimestamp,
+            $previousTimestamp
+        );
     }
 
     public function getAttributeCode(): string
     {
-        return $this->currentData->getCode();
+        return $this->getEntityIdentifier();
     }
 
     public function getCurrentAttributeData(): AttributeData
     {
-        return $this->currentData;
+        return $this->getCurrentEntityData();
     }
 
     public function getPreviousAttributeData(): ?AttributeData
     {
-        return $this->previousData;
+        return $this->getPreviousEntityData();
     }
 
     public function hasPreviousAttributeData(): bool
     {
-        return isset($this->previousData);
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): ?int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var AttributeData */
-    private $currentData;
-    /** @var AttributeData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->hasPreviousEntityData();
     }
 }

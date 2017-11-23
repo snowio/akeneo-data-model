@@ -4,50 +4,32 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\VariantGroupData;
 
-class VariantGroupDeletedEvent
+final class VariantGroupDeletedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->previousData = VariantGroupData::fromJson($json);
-        // right now the akeneo connector only provides one timestamp
-        $event->timestamp = (int)$json['@timestamp'];
-        $event->previousTimestamp = (int)$json['@timestamp'];
-        return $event;
+        $previousData = VariantGroupData::fromJson($json);
+        return new self(
+            $previousData->getCode(),
+            null,
+            $previousData,
+            (int)$json['@timestamp'],
+            (int)$json['@timestamp'] // right now the akeneo connector only provides one timestamp for delete events
+        );
     }
 
     public function getVariantGroupCode(): string
     {
-        return $this->previousData->getCode();
+        return $this->getEntityIdentifier();
     }
 
     public function getChannel(): string
     {
-        return $this->previousData->getChannel();
+        return $this->getPreviousVariantGroupData()->getChannel();
     }
 
     public function getPreviousVariantGroupData(): VariantGroupData
     {
-        return $this->previousData;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var VariantGroupData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->getPreviousEntityData();
     }
 }

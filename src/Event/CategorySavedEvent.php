@@ -4,59 +4,45 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\CategoryData;
 
-class CategorySavedEvent
+final class CategorySavedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->currentData = CategoryData::fromJson($json['new']);
-        $event->timestamp = (int)$json['new']['@timestamp'];
+        $currentData = CategoryData::fromJson($json['new']);
+        $currentTimestamp = (int)$json['new']['@timestamp'];
         if (isset($json['old'])) {
-            $event->previousData = CategoryData::fromJson($json['old']);
-            $event->previousTimestamp = (int)$json['old']['@timestamp'];
+            $previousData = CategoryData::fromJson($json['old']);
+            $previousTimestamp = (int)$json['old']['@timestamp'];
+        } else {
+            $previousData = null;
+            $previousTimestamp = null;
         }
-        return $event;
+        return new self(
+            $currentData->getCode(),
+            $currentData,
+            $previousData,
+            $currentTimestamp,
+            $previousTimestamp
+        );
     }
 
     public function getCategoryCode(): string
     {
-        return $this->currentData->getCode();
+        return $this->getEntityIdentifier();
     }
 
     public function getCurrentCategoryData(): CategoryData
     {
-        return $this->currentData;
+        return $this->getCurrentEntityData();
     }
 
     public function getPreviousCategoryData(): ?CategoryData
     {
-        return $this->previousData;
+        return $this->getPreviousEntityData();
     }
 
     public function hasPreviousCategoryData(): bool
     {
-        return isset($this->previousData);
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): ?int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var CategoryData */
-    private $currentData;
-    /** @var CategoryData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->hasPreviousEntityData();
     }
 }

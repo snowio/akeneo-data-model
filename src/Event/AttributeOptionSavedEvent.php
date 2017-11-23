@@ -6,79 +6,65 @@ use SnowIO\AkeneoDataModel\AttributeOption;
 use SnowIO\AkeneoDataModel\AttributeOptionIdentifier;
 use SnowIO\AkeneoDataModel\InternationalizedString;
 
-class AttributeOptionSavedEvent
+final class AttributeOptionSavedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->currentData = AttributeOption::fromJson($json['new']);
-        $event->timestamp = (int)$json['new']['@timestamp'];
+        $currentData = AttributeOption::fromJson($json['new']);
+        $currentTimestamp = (int)$json['new']['@timestamp'];
         if (isset($json['old'])) {
-            $event->previousData = AttributeOption::fromJson($json['old']);
-            $event->previousTimestamp = (int)$json['old']['@timestamp'];
+            $previousData = AttributeOption::fromJson($json['old']);
+            $previousTimestamp = (int)$json['old']['@timestamp'];
+        } else {
+            $previousData = null;
+            $previousTimestamp = null;
         }
-        return $event;
+        return new self(
+            $currentData->getIdentifier(),
+            $currentData,
+            $previousData,
+            $currentTimestamp,
+            $previousTimestamp
+        );
     }
 
     public function getAttributeOptionIdentifier(): AttributeOptionIdentifier
     {
-        return $this->currentData->getIdentifier();
+        return $this->getEntityIdentifier();
     }
 
     public function getAttributeCode(): string
     {
-        return $this->currentData->getAttributeCode();
+        return $this->getAttributeOptionIdentifier()->getAttributeCode();
     }
 
     public function getOptionCode(): string
     {
-        return $this->currentData->getOptionCode();
+        return $this->getAttributeOptionIdentifier()->getOptionCode();
     }
 
     public function getCurrentAttributeOptionData(): AttributeOption
     {
-        return $this->currentData;
+        return $this->getCurrentEntityData();
     }
 
     public function getPreviousAttributeOptionData(): ?AttributeOption
     {
-        return $this->previousData;
+        return $this->getPreviousEntityData();
     }
 
     public function hasPreviousAttributeOptionData(): bool
     {
-        return isset($this->previousData);
+        return $this->hasPreviousEntityData();
     }
 
     public function getCurrentAttributeOptionLabels(): InternationalizedString
     {
-        return $this->currentData->getLabels();
+        return $this->getCurrentAttributeOptionData()->getLabels();
     }
 
-    public function getPreviousAttributeOptionLabels(): ?InternationalizedString
+    public function getPreviousAttributeOptionLabels(): InternationalizedString
     {
-        return $this->previousData ? $this->previousData->getLabels() : InternationalizedString::create();
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): ?int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var AttributeOption */
-    private $currentData;
-    /** @var AttributeOption */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->hasPreviousAttributeOptionData() ? $this->getPreviousAttributeOptionData()->getLabels() : InternationalizedString::create();
     }
 }

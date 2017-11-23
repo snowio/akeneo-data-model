@@ -4,59 +4,45 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\FamilyData;
 
-class FamilySavedEvent
+final class FamilySavedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $event = new self;
-        $event->currentData = FamilyData::fromJson($json['new']);
-        $event->timestamp = (int)$json['new']['@timestamp'];
+        $currentData = FamilyData::fromJson($json['new']);
+        $currentTimestamp = (int)$json['new']['@timestamp'];
         if (isset($json['old'])) {
-            $event->previousData = FamilyData::fromJson($json['old']);
-            $event->previousTimestamp = (int)$json['old']['@timestamp'];
+            $previousData = FamilyData::fromJson($json['old']);
+            $previousTimestamp = (int)$json['old']['@timestamp'];
+        } else {
+            $previousData = null;
+            $previousTimestamp = null;
         }
-        return $event;
+        return new self(
+            $currentData->getCode(),
+            $currentData,
+            $previousData,
+            $currentTimestamp,
+            $previousTimestamp
+        );
     }
 
     public function getFamilyCode(): string
     {
-        return $this->currentData->getCode();
+        return $this->getEntityIdentifier();
     }
 
     public function getCurrentFamilyData(): FamilyData
     {
-        return $this->currentData;
+        return $this->getCurrentEntityData();
     }
 
     public function getPreviousFamilyData(): ?FamilyData
     {
-        return $this->previousData;
+        return $this->getPreviousEntityData();
     }
 
     public function hasPreviousFamilyData(): bool
     {
-        return isset($this->previousData);
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function getPreviousTimestamp(): ?int
-    {
-        return $this->previousTimestamp;
-    }
-
-    /** @var FamilyData */
-    private $currentData;
-    /** @var FamilyData */
-    private $previousData;
-    private $timestamp;
-    private $previousTimestamp;
-
-    private function __construct()
-    {
-
+        return $this->hasPreviousEntityData();
     }
 }

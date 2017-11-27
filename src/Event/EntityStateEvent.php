@@ -28,7 +28,7 @@ abstract class EntityStateEvent
         return $this->timestamp;
     }
 
-    public function getPreviousTimestamp(): int
+    public function getPreviousTimestamp(): ?int
     {
         return $this->previousTimestamp;
     }
@@ -44,7 +44,7 @@ abstract class EntityStateEvent
         $currentEntityData,
         $previousEntityData,
         int $timestamp,
-        int $previousTimestamp
+        ?int $previousTimestamp
     ) {
         $this->entityIdentifier = $entityIdentifier;
         $this->currentEntityData = $currentEntityData;

@@ -32,6 +32,7 @@ class FamilyData
     public static function fromJson(array $json): self
     {
         $family = new self;
+        $family->code = $json['code'];
         $family->groups = array_map(function (array $attributeGroup) {
             return AttributeGroup::fromJson($attributeGroup);
         }, $json['attribute_groups']);

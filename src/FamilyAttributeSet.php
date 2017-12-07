@@ -38,7 +38,8 @@ class FamilyAttributeSet implements \IteratorAggregate
         foreach ($json as $attributeGroupJson) {
             foreach ($attributeGroupJson['attributes'] as $attributeJson) {
                 $attributeJson += ['group' => $attributeGroupJson['code']];
-                $attributes[$attributeGroupJson['code']] = FamilyAttributeData::fromJson($attributeJson);
+                $attributeData = FamilyAttributeData::fromJson($attributeJson);
+                $attributes[$attributeData->getCode()] = $attributeData;
             }
         }
 

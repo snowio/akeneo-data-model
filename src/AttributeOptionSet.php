@@ -46,7 +46,7 @@ class AttributeOptionSet implements \IteratorAggregate
                     }
                     $labels = \array_combine($optionCodeOrCodes, $labelOrLabels);
                     foreach ($labels as $optionCode => $label) {
-                        $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, $optionCode);
+                        $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, (string)$optionCode);
                         $option = $options[$optionIdentifier->toString()] ?? AttributeOption::of($optionIdentifier);
                         if ($label !== null) {
                             $options[$optionIdentifier->toString()] = $option->withLabel(LocalizedString::of($label, $locale));
@@ -56,7 +56,7 @@ class AttributeOptionSet implements \IteratorAggregate
                     if (\is_array($labelOrLabels)) {
                         throw new AkeneoDataException;
                     }
-                    $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, $optionCodeOrCodes);
+                    $optionIdentifier = AttributeOptionIdentifier::of($attributeCode, (string)$optionCodeOrCodes);
                     $option = $options[$optionIdentifier->toString()] ?? AttributeOption::of($optionIdentifier);
                     if ($labelOrLabels !== null) {
                         $options[$optionIdentifier->toString()] = $option->withLabel(LocalizedString::of($labelOrLabels, $locale));

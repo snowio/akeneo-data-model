@@ -53,7 +53,7 @@ class AttributeOption
 
     public static function fromJson(array $json): self
     {
-        $identifier = AttributeOptionIdentifier::of($json['attribute'], $json['code']);
+        $identifier = AttributeOptionIdentifier::of($json['attribute'], (string)$json['code']);
         $labels = InternationalizedString::fromJson($json['labels']);
         return self::of($identifier)->withLabels($labels);
     }

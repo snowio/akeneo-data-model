@@ -48,7 +48,9 @@ final class InternationalizedString implements \IteratorAggregate
     {
         $localizedStrings = [];
         foreach ($json as $locale => $value) {
-            $localizedStrings[] = LocalizedString::of($value, $locale);
+            if ($value !== null) {
+                $localizedStrings[] = LocalizedString::of($value, $locale);
+            }
         }
         return self::of($localizedStrings);
     }

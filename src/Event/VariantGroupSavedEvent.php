@@ -33,7 +33,7 @@ final class VariantGroupSavedEvent extends EntityStateEvent
 
     public function getChannel(): string
     {
-        return $this->getCurrentVariantGroupData()->getCode();
+        return $this->getCurrentVariantGroupData()->getChannel();
     }
 
     public function getCurrentVariantGroupData(): VariantGroupData

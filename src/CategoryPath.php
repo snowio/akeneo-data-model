@@ -54,9 +54,6 @@ class CategoryPath
 
     public function contains(string $categoryCode): bool
     {
-        if ($categoryCode === $this->getCategoryCode()) {
-            return false;
-        }
         foreach ($this->path as $ancestor) {
             if ($categoryCode === $ancestor) {
                 return true;

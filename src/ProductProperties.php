@@ -9,7 +9,8 @@ class ProductProperties
         $properties = new self;
         $properties->sku = $sku;
         $properties->enabled = false;
-        $properties->variantGroups = [];
+        $properties->groups = [];
+        $properties->parent = [];
         $properties->categories = CategoryPathSet::create();
         return $properties;
     }
@@ -18,13 +19,14 @@ class ProductProperties
     {
         $properties = new self;
         $properties->sku = $json['sku'];
-        if (($json['group'] ?? '') === '') {
-            $properties->variantGroups = [];
+        if (($json['parent'] ?? '') === '') {
+            $properties->parent = null;
         } else {
-            $properties->variantGroups = \explode(',', $json['group']);
+            $properties->parent = $json['parent'];
         }
         $properties->enabled = (bool)$json['enabled'];
         $properties->family = $json['family'];
+        $properties->groups = $json['groups'];
         $properties->categories = CategoryPathSet::fromJson($json['categories']);
         return $properties;
     }
@@ -34,17 +36,14 @@ class ProductProperties
         return $this->sku;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getVariantGroups(): array
+    public function getGroups(): array
     {
-        return $this->variantGroups;
+        return $this->groups;
     }
 
-    public function getVariantGroup(): ?string
+    public function getParent(): ?string
     {
-        return $this->variantGroups[0] ?? null;
+        return $this->parent ?? null;
     }
 
     public function getEnabled(): bool
@@ -63,7 +62,8 @@ class ProductProperties
     }
 
     private $sku;
-    private $variantGroups;
+    private $parent;
+    private $groups;
     private $enabled;
     private $family;
     private $categories;

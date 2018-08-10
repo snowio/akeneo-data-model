@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace SnowIO\AkeneoDataModel\Event;
 
-use SnowIO\AkeneoDataModel\VariantGroupData;
+use SnowIO\AkeneoDataModel\ProductModelData;
 
-final class VariantGroupSavedEvent extends EntityStateEvent
+final class ProductModelSavedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $currentData = VariantGroupData::fromJson($json['new']);
+        $currentData = ProductModelData::fromJson($json['new']);
         $currentTimestamp = (int)$json['new']['@timestamp'];
         if (isset($json['old'])) {
-            $previousData = VariantGroupData::fromJson($json['old']);
+            $previousData = ProductModelData::fromJson($json['old']);
             $previousTimestamp = (int)$json['old']['@timestamp'];
         } else {
             $previousData = null;
@@ -26,27 +26,27 @@ final class VariantGroupSavedEvent extends EntityStateEvent
         );
     }
 
-    public function getVariantGroupCode(): string
+    public function getProductModelCode(): string
     {
         return $this->getEntityIdentifier();
     }
 
     public function getChannel(): string
     {
-        return $this->getCurrentVariantGroupData()->getChannel();
+        return $this->getCurrentProductModelData()->getChannel();
     }
 
-    public function getCurrentVariantGroupData(): VariantGroupData
+    public function getCurrentProductModelData(): ProductModelData
     {
         return $this->getCurrentEntityData();
     }
 
-    public function getPreviousVariantGroupData(): ?VariantGroupData
+    public function getPreviousProductModelData(): ?ProductModelData
     {
         return $this->getPreviousEntityData();
     }
 
-    public function hasPreviousVariantGroupData(): bool
+    public function hasPreviousProductModelData(): bool
     {
         return $this->hasPreviousEntityData();
     }

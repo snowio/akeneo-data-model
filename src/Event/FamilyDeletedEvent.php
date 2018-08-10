@@ -3,7 +3,7 @@ namespace SnowIO\AkeneoDataModel\Event;
 
 use SnowIO\AkeneoDataModel\FamilyData;
 
-class FamilyDeletedEvent extends EntityStateEvent
+final class FamilyDeletedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {

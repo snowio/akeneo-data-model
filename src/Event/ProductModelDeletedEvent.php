@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace SnowIO\AkeneoDataModel\Event;
 
-use SnowIO\AkeneoDataModel\VariantGroupData;
+use SnowIO\AkeneoDataModel\ProductModelData;
 
-final class VariantGroupDeletedEvent extends EntityStateEvent
+final class ProductModelDeletedEvent extends EntityStateEvent
 {
     public static function fromJson(array $json): self
     {
-        $previousData = VariantGroupData::fromJson($json);
+        $previousData = ProductModelData::fromJson($json);
         return new self(
             $previousData->getCode(),
             null,
@@ -18,17 +18,17 @@ final class VariantGroupDeletedEvent extends EntityStateEvent
         );
     }
 
-    public function getVariantGroupCode(): string
+    public function getProductModelCode(): string
     {
         return $this->getEntityIdentifier();
     }
 
     public function getChannel(): string
     {
-        return $this->getPreviousVariantGroupData()->getChannel();
+        return $this->getPreviousProductModelData()->getChannel();
     }
 
-    public function getPreviousVariantGroupData(): VariantGroupData
+    public function getPreviousProductModelData(): ProductModelData
     {
         return $this->getPreviousEntityData();
     }

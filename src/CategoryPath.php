@@ -62,6 +62,11 @@ class CategoryPath
         return false;
     }
 
+    public function equals($other)
+    {
+        return $other instanceof self && $other->path === $this->path;
+    }
+
     private $path = [];
 
     private function __construct()

@@ -1,7 +1,7 @@
 # Akeneo Data Model
 
 This package lets users work with models when access and transforming events coming 
-from the akeneo 1 and 2 connector
+from the Akeneo 1 and 2 connector.
 
 ## Getting Started
 
@@ -9,10 +9,6 @@ from the akeneo 1 and 2 connector
 
 This data model should be used within the snow io project mappings. The events **MUST** be coming
 from an akeneo application.
-
-```
-Give examples
-```
 
 ### Installing
 
@@ -36,8 +32,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 * **Josh DiFabio** - *Initial work* 
 * **Alexander Wanyoike** - *Akeneo 2 Support* - [SnowIO](https://github.com/snowio)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 
 
